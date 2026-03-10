@@ -84,6 +84,38 @@ running in any place. But to facilitate apps development for Windows.
  .NET used multiple concepts of Java, but specifically for windows. It did not came up with the multi-platform concept,
  and was coupled to windows. It worked only on windows.
 
+## Lesson 3 - Differences between .NET Framework (legacy) and .NET
+
+### .NET Framework
+
+Legacy version, only works in windows. It is integrated with windows.
+
+We have some examples of applications we can write on the framework. The main ones are Windows Forms, which are the
+screens we are used to see, ASP.NET that is its web part, and WPF where we can develop applications for windows.
+
+### .NET
+
+This version is the current version and was practically rewritten from scratch. It was made with the mentality of working
+in multi-platforms, meaning that it will execute either on windows, linux or iOS. Without having to rewrite the code.
+
+The difference between platforms exist. For example, in windows we have our user documents folder, in linux we have the
+user's /home, and the challenges we may face is normally these kind of stuff. How to access a file, the permissions, but
+the code itself, already works in a way easier manner to be executed.
+
+.NET also has the `.NET Native` that consist of windows native apps. Like the ones we find on the store.
+
+### Shared
+
+We have the Runtime components, libraries, and compiler s (.NET Compiler (Roslyn Languages Innovation)) that are shared
+across both of them.
+
+### Multi-platform key benefits
+
+1
+
+2. Easy of developing to multiple systems
+
+
 
 
 

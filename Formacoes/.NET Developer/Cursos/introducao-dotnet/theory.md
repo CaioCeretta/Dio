@@ -111,7 +111,8 @@ across both of them.
 
 ### Multi-platform key benefits
 
-1
+1. The main benefit, which are the server costs, that are way cheaper on platforms like Linux. Because in windows platforms,
+besides acquiring the server, we also need its license, which mainly for servers, is very expensive
 
 2. Easy of developing to multiple systems
 

@@ -9,5 +9,5 @@ They are commonly used to represent real-word entities or structured information
 
 Example
 
-A user in a system could be represented as an object:
+A user in a system could be represented as an object
 

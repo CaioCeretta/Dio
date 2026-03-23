@@ -1,29 +1,5 @@
 This course is basically what i have already seen during my career. So i will use here to pin-point some specific concepts.
 
-## Objects
-
-An object is a data structure that groups related data and behavior into a single entity. Objects are composed of properties
-(data) and sometimes methods (functions that operate on that data).
-
-They are commonly used to represent real-word entities or structured information in software.
-
-Example
-
-A user in a system could be represented as an object:
-```ts
-const user = {
-  id: 1,
-  name: "Caio",
-  email: "caio@email.com",
-  isAdmin: false
-}
-```
-
-Objects are useful because they group related data together
-represent complex entities
-improve code readability
-organize data logically
-
 ## Data Structures
 
 A data structure is a specific way of organizing and storing data so it can be accessed and modified efficiently.
@@ -310,11 +286,137 @@ Use array when
 
 Tuple is more specific when we want more control and security
 
+### Stack
 
+A `Stack` is a **Last In, First Out (LIFO)** data structure
 
+• The last element added is the first of be removed
+• Common operations are push, pop
 
+#### When to use it
 
- 
+• Undo/Redo functionality
+• Function call tracking (call stack)
+
+#### Example
+
+```ts
+const stack:number[] = []
+
+stack.push(1)
+stack.push(2)
+stack.push(3)
+
+console.log(stack.pop()) // 3
+console.log(stack) // [1, 2]
+```
+
+### Queue
+
+A `Queue` is a **First In, First out (FIFO)** data structure
+
+• The first element added is the first to be removed
+• Common operations: `enqueue`, `dequeue`
+
+#### When to use
+
+• Task Scheduling
+• Handling requests (e.g. API calls, message queues)
+
+#### Example
+
+```ts
+const queue: number[] = []
+
+queue.push(1);
+queue.push(2);
+queue.push(3);
+
+console.log(queue.shift()) // 1. (Dequeue)
+console.log(queue) // [2, 3]
+```
+
+### Linked List
+
+A `Linked List` is a collection of elements (nodes) where each node points to the next
+
+• Not stored in contiguous memory
+• Efficient insertion/removal (O(1)) if position is known
+• Slow access (O(n))
+
+#### When to use it
+
+• Frequent insertions/removals
+• Dynamic memory usage
+
+#### Example
+
+```ts
+type NodeType = {
+  value: number
+  next: NodeType | null
+}
+
+const node1: NodeType = { value: 1, next: null }
+const node2: NodeType = { value: 2, next: null }
+
+node1.next = node2
+
+console.log(node1.next?.value) // 2
+```
+
+### Tree
+
+A `Tree` is a hierarchical data structure with a root node and child nodes
+
+• Each node can have multiple children
+• Common types: Binary Tree, Binary Search (BST)
+
+#### When to use
+
+• Representing hierarchical data (e.g., file systems, categories)
+• Searching and sorting data efficiently
+
+#### Example
+
+```ts
+type = TreeNode = {
+  value: number;
+  left: TreeNode | null;
+  right: TreeNode | null;
+}
+
+const tree: TreeNode = {
+  value: 10;
+  left: { value: 5, left: null, right: null },
+  right: { value: 15, left: null, right: null }
+}
+
+console.log(tree.left?.value) // 5
+```
+
+### Graph
+
+A `Graph` is a collection of nodes (vertices) connected by edges
+
+• Can be directed or undirected
+• Can represent complex relationships
+
+#### When to use
+
+• Social Networks
+• Maps and Navigation Systems
+• Recommendation Systems
+
+#### Example
+
+```ts
+const graph: Record<string, string[]> = {
+  A: ["B", "C"],
+  B: ["A", "C"],
+  C: ["A"],
+  D: ["B"],
+}
 
 
 

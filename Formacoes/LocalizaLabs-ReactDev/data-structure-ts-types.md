@@ -417,6 +417,298 @@ const graph: Record<string, string[]> = {
   C: ["A"],
   D: ["B"],
 }
+```
+
+## Utilities
+
+Utilities are exclusive to typescript, they only exist during compilation time. They don't generate a JS code, they don't
+exist during runtime and they serve only to help TS to validate types.
+
+### Record
+
+A `Record` creates an object type with specific keys and a fixed value type
+
+• Keys are predefined
+• All values share the same type
+• Useful for mapping keys to values
+
+#### When to use
+
+• Mapping IDs to data
+• Creating dictionaries
+• Enum-like structures
+
+#### Example
+
+```ts
+type User = {
+  name: string
+}
+
+const users: Record<number, User> = {
+  1: { name: "Caio"},
+  2: { name: "Alex"},
+  3: { name: "André"}
+}
+
+console.log(user[1].name) // Caio
+```
+
+### Pick
+
+`Pick` creates a new type by selecting specific properties from another type
+
+• Keeps only selected fields
+• Useful for narrowing data
+
+#### When to use
+
+• Selecting only needed fields from a model
+• API responses
+
+#### Example
+
+```ts
+type User = {
+  id: number;
+  name: string;
+  email: string;
+}
+
+type UserPreview = Pick<User, "id" | "name">
+
+const user: UserPreview = {
+  id: 1,
+  name: "Caio"
+}
+```
+
+### Omit
+
+`Omit` creates a new type by removing specific properties
+
+• Opposite of `Pick`
+• Useful to exclude sensitive or unnecessary data
+
+#### When to use
+
+• Removing password fields
+• Cleaning data before sending to frontend
+
+#### Example
+
+```ts
+type User = {
+  id: number
+  name: string
+  password: string
+}
+
+type SafeUser = Omit<User, "password">
+
+const user: SafeUser = {
+  id: 1,
+  name: "Caio"
+}
+```
+
+### Partial
+
+`Partial` makes all properties optional
+
+• Transform required fields into optional
+• Great for updates
+
+#### When to use
+
+• Update  forms
+• Patch requests
+
+#### Example
+
+```ts
+type User = {
+  id: number
+  name: string
+}
+
+function updateUser(data: Partial<User>) {
+  //data can have only some fields
+}
+
+updateUser({name: "Carlos"})
+```
+
+### Required
+
+`Required` makes all properties mandatory
+
+• Opposite of `Partial`
+• Ensures full data is provided
+
+#### When to use
+
+• Validated objects
+• Internal logic where all fields must exist
+
+#### Example
+
+```ts
+type User = {
+  id?: number
+  name?: string
+}
+
+type FullUser = Required<User>
+
+const user: FullUser = {
+  id: 1,
+  name: "Caio"
+}
+```
+
+### Readonly
+
+`Readonly` makes all properties immutable
+
+• Prevents reassignment
+• Helps avoid accidental mutations
+
+#### When to use
+
+• Immutable state
+• Constants
+
+#### Example
+
+```ts
+type User = {
+  id: number;
+  name: string;
+}
+
+const user: Readonly<User> = {
+  id: 1,
+  name: "Caio"
+}
+
+// user.name = "Alex" X Error
+```
+
+We tend to think to think that because it is a constant, but the short answer is
+
+• `const` does't prevent the modification of internal properties
+• `Readonly` prevents
+
+1. What const actually does
+
+```ts
+const user = {
+  id: 1,
+  name: "Caio"
+}
+
+user.name = "Carlos" // Allowed
+```
+
+const means that
+
+• We can't reassign the variable
+• But we can modify the internal content
+
+2. When const throws errors
+
+Only if we try to modify the object as a whole
+
+user = { id: 2, name: "Alex" } // Error
+
+3. What readonly does
+
+```ts
+type User = {
+  id: number
+  name: string
+}
+
+const user: Readonly<User> = {
+  id: 1,
+  name: "Alex"
+}
+```
+
+now
+
+`user.name = "Caio" // Error`
+
+Because typescript blocks internal mutation
+
+### Exclude
+
+`Exclude` removes types from unions
+
+• Filters unwanted types
+• Works only with union types
+
+#### When to use
+
+• Restricting possible values
+• Cleaning unions
+
+#### Example
+
+```ts
+type Status = "success" | "error" | "loading"
+
+type FinalStatus = Exclude<Status, "loading">
+
+// "success" | "error"
+```
+
+### Extract
+
+`Extract` keeps only types from a union
+
+• Opposite of exclude
+• Selects matching type
+
+#### When to use
+
+• Picking specific cases from unions
+
+#### Example
+
+```ts
+type Status = "success" | "error" | "loading"
+
+type LoadingStatus = Extract<Status, "loading">
+
+// "loading"
+```
+
+### NonNullable
+
+`NonNullable` removes `null` and `undefined`
+
+• Ensures value is defined
+• Useful for data handling
+
+#### When to use
+
+• API data validation
+• Avoiding null checks
+
+#### Example
+```ts
+type Value = string | null | undefined
+
+type SafeValue = NonNullable<Value>
+
+// string
+```
+
+
+
+
 
 
 

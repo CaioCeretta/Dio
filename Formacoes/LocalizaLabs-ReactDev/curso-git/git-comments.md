@@ -161,7 +161,25 @@ because of the structure maintained by git.
 
 ## SSH keys and tokens
 
-#### 
+### Git password authentication
+
+In case we want to push something to a repository, we have to be authenticated, to show that "i am realy me" when pushing
+to a local repository, for example.
+
+Some years ago, github only asked for the username and the password, however, in more recent years, github shutdown this
+kind of authentication of only login/password, and it created new safer processes to us, for the authentication
+
+#### SSH
+
+SSH, in simpler terms, is a way to create an encrypted and save way, for two machines talk to communicate, e.g. There
+is the github server, and we want to communicate with it through our machine. Therefore, we have to create a local SSH
+and add it to our github account making sure that the machine is secure and establish the connection after a key. 
+
+SSH keys always have two keys, one public, and a private one. The public key is the one added to our github account, and
+as soon as we do this, github will know our machine, and whichever repository we have in our machine by this SSH process
+and we wish to send code to it, github will already know who is the one talking to it, and allow it. 
+
+
 
 
 

@@ -177,7 +177,14 @@ and add it to our github account making sure that the machine is secure and esta
 
 SSH keys always have two keys, one public, and a private one. The public key is the one added to our github account, and
 as soon as we do this, github will know our machine, and whichever repository we have in our machine by this SSH process
-and we wish to send code to it, github will already know who is the one talking to it, and allow it. 
+and we wish to send code to it, github will already know who is the one talking to it, and allow it.
+
+So in basic terms how we make this communication. We generate the ssh key, which will give to us both a public and a secret
+key. Add the public key to github "SSH and GPG keys" section in our settings. And for the secret key, we will start the
+ssh-agent via terminal, and execute the command to add our given secret ssh to this agent, and creating our own password
+for this given key. And now github knows that this given secret ssh key, is refering to that public one. Github, behind
+the scenes, sends a "challenge" to our machine, that only our secret ssh key is able to solve.
+
 
 
 

@@ -185,6 +185,36 @@ ssh-agent via terminal, and execute the command to add our given secret ssh to t
 for this given key. And now github knows that this given secret ssh key, is refering to that public one. Github, behind
 the scenes, sends a "challenge" to our machine, that only our secret ssh key is able to solve.
 
+## Initiating the first repository
+
+We will start working with git and forget github for now.
+
+### Git init
+
+By executing a git init, git informs us that an empty git repository was initialized.
+
+Alongside with this command, git creates a hidden `.git` folder. This a folder where git creates the versions of the
+objects that we are handling.
+
+### Git Commit
+
+After the commit command, on the terminal, we can see: 
+
+. The first 8 digits of that commit SHA1
+. The branch in which this commit was made.
+. Number of lines and files insertion.  
+. Create mode. This indicates that the file is new to git, in case we were just editing a file, it would only show the
+lines modified/inserted
+
+
+#### First time we are using git
+
+In the first time we are using git, to be able to create commits, pushes, and more. We have to define our credentials,
+since when a commit is created, it is created with an author. These commands are
+
+`git config --global user.email "caioceretta@gmail.com"
+git config --global user.name CaioCeretta`
+
 
 
 

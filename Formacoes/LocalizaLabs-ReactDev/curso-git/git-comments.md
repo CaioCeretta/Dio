@@ -215,6 +215,56 @@ since when a commit is created, it is created with an author. These commands are
 `git config --global user.email "caioceretta@gmail.com"
 git config --global user.name CaioCeretta`
 
+## Git Lifecycle
+
+### Git init
+
+When we execute a git init, we are defining a new repository inside of the folder where it was executed on
+
+### Tracked / Untracked
+
+We can imagine that every file inside a repository is wheter untracked or tracked.
+
+Untracked: Files that git still doesn't know of its existence
+Tracked: files that git "know", they are divided in unmodified, modified and tracked.
+
+.git add moves an untrancked file, directly to the staging area.
+
+. When we remove a file, it goes back for the untracked status.
+
+. When we add the files to the staging area and commit them, they stop being staged files and go a different stage. And
+after a commit happens, all committed files go back to the unmodified state.
+
+### Repositories
+
+A repository is divided in: The server, that stores the remote repository, and the development environment, that contains
+the working directory, staging area and local repository.
+
+Its remote repository is usually github or similar environments.
+
+Everything inside the local repository, doesn't immediately reflect in the server, we need to execute a push command for
+this to happen.
+
+Assume that we have a repository named "livro-receitas" and we create recipe inside this folder. We commit that recipe
+to that repository, but we decide to create a "receitas" folder and move all the recipes to this folder.
+
+By running git status we will see two things. 1 - the recipe was deleted (but it wasn't deleted it was moved to receitas
+folder, but in git's eyes, since the receitas folder isn't still tracked, it doesn't know that it has been moved to it.)
+And that we have a new folder receitas that is untracked by git.
+
+So git is smart enough to notice that there is a folder that is unstaged, and that we should stage it in order for it to
+track it, and then commit it.
+
+After we commit that receitas folder and modify the recipe, by running a git status we will now see that
+`strogonoff.md` was deleted, but `receitas/strogonoff.md` was modified.
+
+In case we want to return a file from the staging area to the working directory, we use git restore --staged <file> in
+order to unstage
+
+
+
+
+
 
 
 

@@ -97,172 +97,78 @@ On that example, git is calculating: `$$sha1(\text{"blob 9\0conteudo\n"})$$`
 
 The number 9 represents the 8 characters of 'conteudo' plus the new line character, which is automatically added by echo.
 
-### Blobs
+## Github
 
-By simply running an `echo 'conteudo' | git hash-object --stdin`
+The username and the email we use in our github account, should be the same as the ones we set up in its configuration.
 
-stdin is just because that function is expecting to receive a file but we are sending a text to it.
+It's worth remembering that the commits that were made using a given email and name, and in case we choose to modify it.
+We won't be able to modify the author of these commits because of all that process, that the commits are linked with
+eacher other, that the author is part of the SHA1, and so on. This means that, if we set up a name and an email on the
+git config, but by the time we created our github account, we used a different e-mail and name, when we try to push something
+to github, github would refuse to push because of permissions. Unless they are colaborators/members of the repo.
 
-The difference of running that command and the command using the openssl command. Is that they use a different set of
-characters. This happens because git's specific objects are stored inside an object named `Blob`. This object contains
-metadata inside of it.
+To point our local repo to the remote one, we execute
 
-A blob contain the object type, a string/file size, a \0, and the content itself
+`git remote add origin 'giturl'`
 
-`echo -e 'blob 9\0conteudo' | openssl sha1` === `echo 'conteudo' | git hash-object --stdin`
+## Solving Git Merge Conflicts
 
-This means that, 
+A merge conflict happens when two people modify the same line of the same file and try to save their work to GitHub. Git
+doesn't know which version is "correct," so it stops and asks you to decide.
 
-### Trees
+### Scenario
 
-Trees store blobs. Blob is the basic composition block, and the trees store and points to different types of blobs and
-to commits.
+Initial State: You and a teammate both have the same code from the livro-receitas repo.
 
-Trees are responsible for storing the files and creating the structure to look for them. Each tree has a SHA1 of that
-given metadata, The blobs have the SHA1 of the file, trees point to that blobs
+The Conflict: Your teammate edits the README, commits, and pushes to GitHub. Meanwhile, you edit the exact same line in
+your local README.
 
-an example would be one tree node point to two blobs and  to other tree that points to a blob
+The Rejection: You try to git push, but GitHub rejects it. It tells you that the remote contains work you don't have yet.
 
-### Commit
+The Pull: You run git pull to get the updates. Git tries to merge them automatically but fails because of the overlapping
+changes.
 
-Commit is the object that will group everything. He is the one that will give sense to the change we are creating.
+### Anatomy of a Conflict
 
-a commit points to a tree, to a sibling, to the author, to the message and to the timestamp and the sha1 generated
-by that commit is the hash of all this information.
+When you open the conflicted file (e.g., README.md), Git marks the trouble spot with special symbols:
 
-Let's say we have a blob, and we modify something inside of it. This will cause its SHA1 to change, then, this blob in
-turn has a tree pointing to it, meaning that if we modify the blob, we also modify the tree SHA1.
+Markdown
+Livro de receitas
+Strogonoff de Frango
 
-Finally, a commit points to a tree, that in turn, may point to other trees. Which means that a change on a file reflects
-on the tree that by consequence will reflect to our commit. That's why git is secure. When we have a commit we are ensuring
-that no one altered that commit. By looking to the history of commits we create a timeline for each commit.
+<<<<<<< HEAD
+Pave
+=======
+Bolo de cenoura
+>>>>>>> [commit-sha]
 
-It is impossible for someone to act maliciously trying to modify the code of a given commit without this being very clear
-in the commits history.
+<<<<<<< HEAD: Starts the section containing your local changes.
 
-Putting every concept together we can think of
+=======: The divider between your code and the incoming code.
 
-Commit: Has a SHA1, a size, a tree that it is point to, an author, and a committer
-Tree: That same tree the commit is point to also has a SHA1, and has a size, and points to three other blobs
-Blobs: Each of these blobs in turn, have a SHA1, and their respective content
+>>>>>>>: The end of the section containing the code from GitHub.
 
-## So why is git a safe distributed system? 
+### How to Fix It
 
-Imagine we have our code/repository hosted on a server inside the cloud. Like github. 
+To resolve the conflict, you manually edit the file to look exactly how you want it. You must remove the Git symbols during this process.
 
-The code that lives there represent the final state of our code. Suppose that our repository has thirty/forty people
-working on it. Now suppose all its maintainers also has a version of this code. By the fact that each commit is practically
-impossible to be altered. Either its most recent version that is on the machine, and all these 40 versions that are distributed
-across the other machines. Also are reliable versions.
+If you want to keep both recipes, change the file to:
 
-Meaning that if a problem on the cloud/github happen, assume that all the servers exploded an the code doesn't exist anymore,
-it also would have to happen something with these forty people. Because their available versions also are very reliable
-because of the structure maintained by git. 
+```markdown
+Livro de receitas
+Strogonoff de Frango
+Pave
+Bolo de cenoura
+```
 
-## SSH keys and tokens
+### Finalizing
+Once the file is cleaned up:
 
-### Git password authentication
+Add the resolved file: git add README.md
 
-In case we want to push something to a repository, we have to be authenticated, to show that "i am realy me" when pushing
-to a local repository, for example.
+Commit the resolution: git commit -m "Fix merge conflict in README"
 
-Some years ago, github only asked for the username and the password, however, in more recent years, github shutdown this
-kind of authentication of only login/password, and it created new safer processes to us, for the authentication
-
-#### SSH
-
-SSH, in simpler terms, is a way to create an encrypted and save way, for two machines talk to communicate, e.g. There
-is the github server, and we want to communicate with it through our machine. Therefore, we have to create a local SSH
-and add it to our github account making sure that the machine is secure and establish the connection after a key. 
-
-SSH keys always have two keys, one public, and a private one. The public key is the one added to our github account, and
-as soon as we do this, github will know our machine, and whichever repository we have in our machine by this SSH process
-and we wish to send code to it, github will already know who is the one talking to it, and allow it.
-
-So in basic terms how we make this communication. We generate the ssh key, which will give to us both a public and a secret
-key. Add the public key to github "SSH and GPG keys" section in our settings. And for the secret key, we will start the
-ssh-agent via terminal, and execute the command to add our given secret ssh to this agent, and creating our own password
-for this given key. And now github knows that this given secret ssh key, is refering to that public one. Github, behind
-the scenes, sends a "challenge" to our machine, that only our secret ssh key is able to solve.
-
-## Initiating the first repository
-
-We will start working with git and forget github for now.
-
-### Git init
-
-By executing a git init, git informs us that an empty git repository was initialized.
-
-Alongside with this command, git creates a hidden `.git` folder. This a folder where git creates the versions of the
-objects that we are handling.
-
-### Git Commit
-
-After the commit command, on the terminal, we can see: 
-
-. The first 8 digits of that commit SHA1
-. The branch in which this commit was made.
-. Number of lines and files insertion.  
-. Create mode. This indicates that the file is new to git, in case we were just editing a file, it would only show the
-lines modified/inserted
-
-
-#### First time we are using git
-
-In the first time we are using git, to be able to create commits, pushes, and more. We have to define our credentials,
-since when a commit is created, it is created with an author. These commands are
-
-`git config --global user.email "caioceretta@gmail.com"
-git config --global user.name CaioCeretta`
-
-## Git Lifecycle
-
-### Git init
-
-When we execute a git init, we are defining a new repository inside of the folder where it was executed on
-
-### Tracked / Untracked
-
-We can imagine that every file inside a repository is wheter untracked or tracked.
-
-Untracked: Files that git still doesn't know of its existence
-Tracked: files that git "know", they are divided in unmodified, modified and tracked.
-
-.git add moves an untrancked file, directly to the staging area.
-
-. When we remove a file, it goes back for the untracked status.
-
-. When we add the files to the staging area and commit them, they stop being staged files and go a different stage. And
-after a commit happens, all committed files go back to the unmodified state.
-
-### Repositories
-
-A repository is divided in: The server, that stores the remote repository, and the development environment, that contains
-the working directory, staging area and local repository.
-
-Its remote repository is usually github or similar environments.
-
-Everything inside the local repository, doesn't immediately reflect in the server, we need to execute a push command for
-this to happen.
-
-Assume that we have a repository named "livro-receitas" and we create recipe inside this folder. We commit that recipe
-to that repository, but we decide to create a "receitas" folder and move all the recipes to this folder.
-
-By running git status we will see two things. 1 - the recipe was deleted (but it wasn't deleted it was moved to receitas
-folder, but in git's eyes, since the receitas folder isn't still tracked, it doesn't know that it has been moved to it.)
-And that we have a new folder receitas that is untracked by git.
-
-So git is smart enough to notice that there is a folder that is unstaged, and that we should stage it in order for it to
-track it, and then commit it.
-
-After we commit that receitas folder and modify the recipe, by running a git status we will now see that
-`strogonoff.md` was deleted, but `receitas/strogonoff.md` was modified.
-
-In case we want to return a file from the staging area to the working directory, we use git restore --staged <file> in
-order to unstage
-
-
-
+Push to GitHub: git push origin [branch-name]
 
 
 

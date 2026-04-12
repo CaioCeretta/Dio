@@ -170,9 +170,73 @@ Commit the resolution: git commit -m "Fix merge conflict in README"
 
 Push to GitHub: git push origin [branch-name]
 
+## Fast Forward Merge
 
+A *fast-forward* merge is the simples type of merge in Git. It happens when we try to merge one branch into another, and 
+there have been *no new commits* on the main branch since we started our work.
 
+### How it works
 
+1. The Starting Point: You are on main at Commit A.
+2. The Branch: You create a feature branch and move to it.
+3. The Work: You make two commits (B and C) on your feature branch.
+4. The Gap: Crucially, nobody else has pushed anything to main while you were working. main is still sitting at Commit A.
+5. The Merge: When you merge feature back into main, Git realizes it doesn't need to combine any conflicting code. It simply
+"points" the main label to Commit C.
+
+### Why is it called "Fast-Forward"?
+Because Git literally just moves the pointer (the "HEAD") forward to the latest commit. There is no "Merge Commit" created.
+The history remains a perfectly straight line.
+
+### When will it NOT work?
+A Fast-Forward is impossible if the main branch has moved forward while you were working.
+
+• Fast-Forward: main stayed still. Git just "skips" ahead.
+• Merge Conflict / Three-Way Merge: main moved (someone else pushed code). Now Git has to actually combine the two different
+paths.
+
+### How to do it
+
+If the conditions are right, Git does this by default when you run:
+
+```Bash
+git checkout main
+git merge feature-branch
+```
+
+### Force git to create a merge commit
+
+If you want to force Git to create a merge commit even if a fast-forward is possible (to keep a record of the branch),
+you can use:
+
+```Bash
+git merge --no-ff feature-branch
+```
+
+This are for the cases where we want to leave registered "Look, pages 11 and 13 were a special idea i had for a chapter"
+
+Even though no one changed the `main` branch when we execute the --no--ff, git does the following
+
+1. Creates a new commit ("A conclusion page")
+2. This commit was used only to tell that the feature integration has ended.
+
+#### Why would someone do this? 
+
+If we use just the fast forward, the historic stays like this:
+
+a --- b --- c --- d
+
+If we use ---no-ff, historic wins a visual balloon, like
+
+          B --- C  (Our feature)
+         /       \
+    A ----------- D (Merge commit)
+
+### no-ff advantages
+
+• Organization: We can clearly see what set of updates were combined with the main version
+• Reversal: If something goes wrong with our feature, we can simply undo the merge commit (d) and git removes the whole
+feature at once, instead of "hunting" commit by commit
 
 
 

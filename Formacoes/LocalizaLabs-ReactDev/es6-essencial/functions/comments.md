@@ -201,4 +201,45 @@ A pure function follow two specific rules:
 
 *Determinism*: For the same argument, it will always return the same result (it do not depend on external variables that
 may change)
-*No side effects* 
+*No side effects*: A pure function do not modify anything outside of it (doesn't modify global variables, doesn't write
+in the console. doesn't modify the db)
+
+When a function depends only of its parameters, the entire "context" is right in our front. It is easier to test and
+understand it.
+
+**Problem of extensive closures (State Soup)**
+
+When we use closures to maintain a mutable state, it makes the code harder to debug and maintain
+
+The danger: If a HOF returns a functions that depends on a variable of the parent's scope, this variable is modified by
+other functions, we would create a hidden state. Example:
+
+```js
+function createCounter() {
+    let hiddenStateCounter = 0; // This becomes a "black box"
+    
+    return {
+        increment: () => {
+            hiddenStateCounter += 1; // Hidden mutation
+            return hiddenStateCounter;
+        },
+        reset: () => {
+            hiddenStateCounter = 0;
+        }
+    };
+}
+```
+
+So we can take as conclusion:
+
+• Closure advantage: Excellent for initial configuration and dependency injections, like (passing a logger, an API url or
+a validation rule that doesn't change)
+• Closure risks: If used to manage complex states that change over time, it breaks the referential transparency and
+makes the bug tracking difficult
+• Good Practices: Whenever possible, prefer pure functions. Use closures only when a function factory is needed or to
+"hide" configurations that the rest of the system do not need to know about.
+• Day to Day tip: In react or modern functional architectures, the tendency is to maintain the logic the "purest" as
+possible to isolate side effect/states in well defined places
+
+
+
